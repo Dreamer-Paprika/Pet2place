@@ -19,10 +19,7 @@ innerContr.style.marginTop = '10px';
 dataContainer.append(innerContr);
 
 //loaderMsg.classList.remove('hide');
-//Notiflix.Loading.hourglass("Loading data, please wait...")
-Notiflix.Loading.circle('Finding Events, please wait...', {
-  svgColor: 'rgba(220, 86, 197, 1)',
-});
+Notiflix.Loading.hourglass("Fetching breeds, please wait...")
 fetchBreeds()
   .then(response => {
     if (!response.ok) {
