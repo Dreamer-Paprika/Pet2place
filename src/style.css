@@ -247,7 +247,7 @@ border-radius: 30px;
   color: rgb(114, 17, 17); 
 }
 
-.place-bio{
+.place-list-wrapper{
  display: flex;
 justify-content: center;
 align-items: center;
@@ -259,7 +259,7 @@ font-weight: 700;
 color: #721111;
 }
 
-.place-bio-link{
+.place-alt-link{
   background-color: rgb(240, 164, 65);
   border: 1px solid #721111;
   padding: 20px;

@@ -1,0 +1,21 @@
+[
+    {
+        "label":"Dog Walkers",
+        "value":"dog_walkers"
+    },
+    {
+        "label":"Dog Park",
+        "value":"dog_park"
+    },
+    {
+        "label":"Dog Trainer",
+        "value":"dog_trainer"
+    },
+    {
+        "label":"Zoo",
+        "value":"zoo"
+    },
+    {   "label":"Animal Aassisted Therapy",
+        "value":"animal_assisted_therapy"
+    }
+]

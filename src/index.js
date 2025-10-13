@@ -3,15 +3,25 @@ import { fetchCatBreeds } from './cat-api.js';
 import { fetchDogBreeds } from './dog-api.js';
 import { fetchCatByBreed } from './cat-api.js';
 import { fetchDogByBreed } from './dog-api.js';
+import { findPlaces } from './places-api.js';
 import Countries from './countries_sorted_alphabetical.json';
+import dogPlaceCategories from './dogPlaceCategories.json';
 
 const catSelector = document.querySelector('.cat-breed-select');
 const dogSelector = document.querySelector('.dog-breed-select');
+const altLink = document.querySelector('.place-alt-link');
+const placeSelector = document.createElement('select');
+//const placeTableWrapper = document.createElement('div');
+placeSelector.style.display = 'none';
+
 
 const innerContr = document.querySelector('.pet-bio');
 
-const placeInnerContr = document.querySelector('.place-bio');
+const placeInnerContr = document.querySelector('.place-list-wrapper');
 
+placeInnerContr.append(placeSelector);
+
+let selectedPlace;
 
 
 
@@ -246,6 +256,7 @@ fetchCatBreeds()
           .then(ans => {
             const myObj = dogBreeds.find(item => item.name === selected);
             const myPlace = Countries.find(country => country.alpha_2 === myObj.country_code);
+            selectedPlace = myPlace;
              console.log(myObj);
             console.log(myPlace);
             const data = ans
@@ -284,7 +295,16 @@ fetchCatBreeds()
               })
               .join('');
             innerContr.insertAdjacentHTML('beforeend', data);
-            //loaderMsg.classList.add('hide');
+            altLink.style.display = 'none';
+            placeSelector.style.display = 'block';
+            placeSelector.style.width = '260px';
+            placeSelector.style.color = '#721111';
+            placeSelector.style.border = '1px solid #721111';
+            placeSelector.style.borderRadius = '5px'
+            placeSelector.style.padding = '5px'
+            placeSelector.style.fontFamily = "Comic Sans MS";
+            placeSelector.style.fontWeight = "700";
+            renderDogPlaces(placeSelector, dogPlaceCategories);
             Notiflix.Loading.remove();
             
           })
@@ -301,6 +321,16 @@ fetchCatBreeds()
           });
       });
     });
+
+placeSelector.addEventListener('change', (event) => {
+  //Create an element and perform innerHTML on it to add the table of places and facebook links placeInnerContr
+  Notiflix.Loading.hourglass('Loading data, please wait...');
+  findPlaces(event.target.value, selectedPlace.alpha_2).then((res) => { return res.json() }).then((res) => {
+    Notiflix.Loading.remove();
+    console.log(res);
+  });
+  
+});    
 
 
 function renderCatBreeds(selector,users) {
@@ -345,6 +375,28 @@ function renderDogBreeds(selector, users) {
       //option.style.borderRadius = "5px";
       selector.append(option);
     }
+  });
+}
+
+function renderDogPlaces(selector, categories) {
+  const placeholder = document.createElement('option');
+  placeholder.setAttribute('disabled', '');
+  placeholder.setAttribute('selected', 'selected');
+  placeholder.setAttribute('value', '');
+  placeholder.textContent = 'Choose a Place Category';
+  placeholder.style.fontWeight = 'bold';
+  selector.append(placeholder);
+
+  categories.forEach(category => {
+    
+      const option = document.createElement('option');
+      option.setAttribute('value', category.value);
+      option.textContent = category.label;
+      option.style.backgroundColor = '#333333';
+      option.style.color = 'white';
+      //option.style.borderRadius = "5px";
+      selector.append(option);
+    
   });
 }
 
