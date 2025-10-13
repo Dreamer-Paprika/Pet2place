@@ -3,12 +3,14 @@ import { fetchCatBreeds } from './cat-api.js';
 import { fetchDogBreeds } from './dog-api.js';
 import { fetchCatByBreed } from './cat-api.js';
 import { fetchDogByBreed } from './dog-api.js';
+import Countries from './countries_sorted_alphabetical.json';
 
 const catSelector = document.querySelector('.cat-breed-select');
 const dogSelector = document.querySelector('.dog-breed-select');
 
-const dataContainer = document.querySelector('.pet-info');
 const innerContr = document.querySelector('.pet-bio');
+
+const placeInnerContr = document.querySelector('.place-bio');
 
 
 
@@ -91,7 +93,7 @@ function selectCatBreed(event) {
         .join('');
       innerContr.insertAdjacentHTML('beforeend', data);
       Notiflix.Loading.remove();
-      dataContainer.classList.remove('hide');
+      //dataContainer.classList.remove('hide');
     })
 
     .catch(error => {
@@ -181,7 +183,7 @@ fetchCatBreeds()
           innerContr.insertAdjacentHTML('beforeend', data);
           //loaderMsg.classList.add('hide');
           Notiflix.Loading.remove();
-          dataContainer.classList.remove('hide');
+          
         })
 
         .catch(error => {
@@ -243,27 +245,48 @@ fetchCatBreeds()
 
           .then(ans => {
             const myObj = dogBreeds.find(item => item.name === selected);
-            console.log(myObj);
+            const myPlace = Countries.find(country => country.alpha_2 === myObj.country_code);
+             console.log(myObj);
+            console.log(myPlace);
             const data = ans
               .map(dog => {
                 return `
-                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; border-radius: 30px; ">
-                         <div><img src="${dog.url}" alt="Picture of Cat" style="width: 300px; height: 300px"/></div>
-                         <div>
-                         <h3  style="margin-top:0px; font-family:'Comic Sans MS'">${myObj.name}</h3>
-                         <h4 style="display:inline; font-family:'Comic Sans MS'">Bread for:</h4>
-                              <p  style="font-family:'Comic Sans MS'">${myObj.bred_for}</p>
-                              <h4 style="display:inline; font-family:'Comic Sans MS'">Temperament:</h4>
-                              <p style="display:inline; font-family:'Comic Sans MS'">${myObj.temperament}</p>
+                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; border-radius: 30px; border: 1px solid rgb(114, 17, 17); padding: 20px; ">
+                         <div style="border: 1px solid #8B0000;"><img src="${dog.url}" alt="Picture of Dog" style="width: 300px; height: 300px"/></div>
+                         
+                         <div style="display: flex; flex-direction: column; gap:15px; align-items: center; ">
+
+                          <table style="border-collapse: collapse;">
+                
+                  <tr>
+                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Name:</h3></th>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.name}</td>
+                  </tr>
+                  <tr>
+                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Bread For:</h3></th>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.bred_for}</td>
+                  </tr>
+                  <tr>
+                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Temperament:</h3></th>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.temperament}</td>
+                  </tr>
+                  <tr>
+                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Country of Origin:</h3></th>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myPlace.name}</td>
+                  </tr>
+              </table>
+
+              <button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in ${myPlace.name}</a></button>
                          </div>
                          </div>
+
                                    `;
               })
               .join('');
             innerContr.insertAdjacentHTML('beforeend', data);
             //loaderMsg.classList.add('hide');
             Notiflix.Loading.remove();
-            dataContainer.classList.remove('hide');
+            
           })
 
           .catch(error => {
@@ -334,3 +357,25 @@ function renderDogBreeds(selector, users) {
         renderPetBreeds(dogSelector, dogBreeds);
       });
  */
+
+      /*
+        <table style="border-collapse: collapse;">
+                
+                  <tr>
+                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Name:</h3></th>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.name}</td>
+                  </tr>
+                  <tr>
+                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Bread For:</h3></th>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.bred_for}</td>
+                  </tr>
+                  <tr>
+                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Temperament:</h3></th>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.temperament}</td>
+                  </tr>
+                  <tr>
+                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Country of Origin:</h3></th>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myPlace.name}</td>
+                  </tr>
+              </table>
+      */
