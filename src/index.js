@@ -6,6 +6,7 @@ import { fetchDogByBreed } from './dog-api.js';
 import { findPlaces } from './places-api.js';
 import Countries from './countries_sorted_alphabetical.json';
 import dogPlaceCategories from './dogPlaceCategories.json';
+import catPlaceCategories from './catPlaceCategories.json';
 
 const catSelector = document.querySelector('.cat-breed-select');
 const dogSelector = document.querySelector('.dog-breed-select');
@@ -18,7 +19,7 @@ const placeTable = document.createElement('table');
 const placeTableHead = document.createElement('thead');
 placeTableHead.innerHTML = `<tr>
 <th style="color: #8B0000; text-align: center; border: 1px solid #8B0000; font-weight: 700;"><h3>Place Name</h3></th>
-<th style="color: #8B0000; text-align: center; border: 1px solid #8B0000; font-weight: 700;"><h3>Facebook Link</h3></th>
+<th style="color: #8B0000; text-align: center; border: 1px solid #8B0000; font-weight: 700;"><h3>Social Link</h3></th>
 </tr>`;
 const placeTableBody = document.createElement('tbody');
 
@@ -89,18 +90,57 @@ fetchCatBreeds()
         .then(ans => {
           const data = ans
             .map(cat => {
+              const myCatPlace = Countries.find(country => country.alpha_2 === cat.breeds[0].country_code);
+              selectedPlace = myCatPlace;
               return `
-                         <div style="padding-right:20px"><img src="${cat.url}" alt="Picture of Cat" width="300px" ></div>
-                         <div><h3  style="margin-top:0px; font-family:'Comic Sans MS'">${cat.breeds[0].name}</h3>
-                              <p  style="font-family:'Comic Sans MS'">${cat.breeds[0].description}</p>
-                              <h4 style="display:inline; font-family:'Comic Sans MS'">Temperament:</h4>
-                              <p style="display:inline; font-family:'Comic Sans MS'">${cat.breeds[0].temperament}</p>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 20px; border-radius: 30px; border: 1px solid rgb(114, 17, 17); padding: 20px; ">
+                         <div style="border: 1px solid #8B0000;"><img src="${cat.url}" alt="Picture of Cat" style="width: 200px; height: 200px"></div>
+                         <div style="display: flex; flex-direction: column; gap:15px; align-items: center; ">
+                         
+                         <table style="border-collapse: collapse;">
+
+                         <tr>
+                        <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Name:</h3></th>
+                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${cat.breeds[0].name}</td>
+                        </tr>
+
+                        <tr>
+                        <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Description:</h3></th>
+                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${cat.breeds[0].description}</td>
+                        </tr>
+
+                          <tr>
+                        <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Temperament:</h3></th>
+                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${cat.breeds[0].temperament}</td>
+                        </tr>
+
+                         <tr>
+                        <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Country of Origin:</h3></th>
+                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myCatPlace.name}</td>
+                        </tr>
+
+                         </table>
+
+                          <button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in ${myCatPlace.name}</a></button>
+                         
+                         </div>
+                         </div>
+                         </div>
                          </div>
                                    `;
             })
             .join('');
           innerContr.insertAdjacentHTML('beforeend', data);
-          //loaderMsg.classList.add('hide');
+          altLink.style.display = 'none';
+          placeSelector.style.display = 'block';
+          placeSelector.style.width = '260px';
+          placeSelector.style.color = '#721111';
+          placeSelector.style.border = '1px solid #721111';
+          placeSelector.style.borderRadius = '5px';
+          placeSelector.style.padding = '5px';
+          placeSelector.style.fontFamily = 'Comic Sans MS';
+          placeSelector.style.fontWeight = '700';
+          renderCatPlaces(placeSelector, catPlaceCategories);
           Notiflix.Loading.remove();
           
         })
@@ -174,7 +214,7 @@ fetchCatBreeds()
               .map(dog => {
                 return `
                          <div style="display: flex; align-items: center; justify-content: center; gap: 20px; border-radius: 30px; border: 1px solid rgb(114, 17, 17); padding: 20px; ">
-                         <div style="border: 1px solid #8B0000;"><img src="${dog.url}" alt="Picture of Dog" style="width: 300px; height: 300px"/></div>
+                         <div style="border: 1px solid #8B0000;"><img src="${dog.url}" alt="Picture of Dog" style="width: 200px; height: 200px"/></div>
                          
                          <div style="display: flex; flex-direction: column; gap:15px; align-items: center; ">
 
@@ -234,8 +274,8 @@ fetchCatBreeds()
     });
 
 placeSelector.addEventListener('change', (event) => {
-  //Create an element and perform innerHTML on it to add the table of places and facebook links placeInnerContr
-  Notiflix.Loading.hourglass('Loading data, please wait...');
+  
+  Notiflix.Loading.hourglass('Loading data, please wait a bit...');
   findPlaces(event.target.value, selectedPlace.alpha_2).then((res) => { return res.json() }).then((res) => {
     Notiflix.Loading.remove();
     console.log(res);
@@ -247,7 +287,7 @@ placeSelector.addEventListener('change', (event) => {
         return `
       <tr>
                     <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${place.properties.names.primary}</td>
-                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;"><a href=${place.properties.socials[0]}>CLICK HERE</a></td>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;"><a href=${place.properties.socials[0]} target='_'>CLICK HERE</a></td>
       </tr>
                   `;};
     }).join('');
@@ -326,5 +366,30 @@ function renderDogPlaces(selector, categories) {
     
     })
   };
+}
+
+
+function renderCatPlaces(selector, categories) {
+  if (isCatAgain === false) {
+    isDogAgain = false;
+    isCatAgain = true;
+    const placeholder = document.createElement('option');
+    placeholder.setAttribute('disabled', '');
+    placeholder.setAttribute('selected', 'selected');
+    placeholder.setAttribute('value', '');
+    placeholder.textContent = 'Choose a Place Category';
+    placeholder.style.fontWeight = 'bold';
+    selector.append(placeholder);
+
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.setAttribute('value', category.value);
+      option.textContent = category.label;
+      option.style.backgroundColor = '#333333';
+      option.style.color = 'white';
+      //option.style.borderRadius = "5px";
+      selector.append(option);
+    });
+  }
 }
 
