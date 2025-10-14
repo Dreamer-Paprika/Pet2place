@@ -33,8 +33,9 @@ const placeInnerContr = document.querySelector('.place-table-wrapper');
 placeInnerContr.append(placeSelector);
 placeInnerContr.append(placeTable);
 placeTable.append(placeTableHead);
-placeTable.append(placeTableBody)
+placeTable.append(placeTableBody);
 
+let dogBreeds;
 let selectedPlace;
 let isDogAgain = false;
 let isCatAgain = false;
