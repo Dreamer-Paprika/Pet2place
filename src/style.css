@@ -240,6 +240,10 @@ margin: 20px auto;
 border-radius: 30px;
 }
 
+.place-details-after{
+  height: fit-content;
+}
+
 .place-info-title{
   font-family: 'Sacramento';
   font-size: 35px;
@@ -247,8 +251,10 @@ border-radius: 30px;
   color: rgb(114, 17, 17); 
 }
 
-.place-list-wrapper{
+.place-table-wrapper{
  display: flex;
+ flex-direction: column;
+ gap:10px;
 justify-content: center;
 align-items: center;
 width: 100%;

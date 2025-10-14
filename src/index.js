@@ -10,126 +10,33 @@ import dogPlaceCategories from './dogPlaceCategories.json';
 const catSelector = document.querySelector('.cat-breed-select');
 const dogSelector = document.querySelector('.dog-breed-select');
 const altLink = document.querySelector('.place-alt-link');
+const detailsArea = document.querySelector('.place-details');
 const placeSelector = document.createElement('select');
-//const placeTableWrapper = document.createElement('div');
 placeSelector.style.display = 'none';
+
+const placeTable = document.createElement('table');
+const placeTableHead = document.createElement('thead');
+placeTableHead.innerHTML = `<tr>
+<th style="color: #8B0000; text-align: center; border: 1px solid #8B0000; font-weight: 700;"><h3>Place Name</h3></th>
+<th style="color: #8B0000; text-align: center; border: 1px solid #8B0000; font-weight: 700;"><h3>Facebook Link</h3></th>
+</tr>`;
+const placeTableBody = document.createElement('tbody');
+
+placeTable.style.display = 'none';
 
 
 const innerContr = document.querySelector('.pet-bio');
 
-const placeInnerContr = document.querySelector('.place-list-wrapper');
+const placeInnerContr = document.querySelector('.place-table-wrapper');
 
 placeInnerContr.append(placeSelector);
+placeInnerContr.append(placeTable);
+placeTable.append(placeTableHead);
+placeTable.append(placeTableBody)
 
 let selectedPlace;
-
-
-
-let catBreeds = [];
-let dogBreeds = [];
-
-let selectedCatBreed;
-let selectedDogBreed;
-
-function fetchAllBreeds() {
-  Notiflix.Loading.hourglass('Fetching breeds, please wait...');
-  fetchCatBreeds()
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      catBreeds = response.json();
-      return catBreeds;
-    })
-
-    .then(users => {
-      renderPetBreeds(catSelector, users);
-    })
-    .catch(error => {
-      Notiflix.Loading.remove();
-      Notiflix.Notify.failure(
-        'Oops! Something went wrong! Try reloading the page!'
-      );
-
-      console.error(`Error message ${error}`);
-    });
-  
-    fetchDogBreeds()
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        dogBreeds = response.json();
-        return dogBreeds;
-      })
-       .then(users => {
-      renderPetBreeds(catSelector, users);
-    })
-    .catch(error => {
-      Notiflix.Loading.remove();
-      Notiflix.Notify.failure(
-        'Oops! Something went wrong! Try reloading the page!'
-      );
-
-      console.error(`Error message ${error}`);
-    });
-
-}
-
-function selectCatBreed(event) {
-  selectedCatBreed = event.target.value;
-
-  Notiflix.Loading.hourglass('Loading data, please wait...');
-  fetchCatByBreed(selectedCatBreed)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-
-    .then(ans => {
-      const data = ans
-        .map(cat => {
-          return `
-                         <div style="padding-right:20px"><img src="${cat.url}" alt="Picture of Cat" width="300px" ></div>
-                         <div><h3  style="margin-top:0px; font-family:'Comic Sans MS'">${cat.breeds[0].name}</h3>
-                              <p  style="font-family:'Comic Sans MS'">${cat.breeds[0].description}</p>
-                              <h4 style="display:inline; font-family:'Comic Sans MS'">Temperament:</h4>
-                              <p style="display:inline; font-family:'Comic Sans MS'">${cat.breeds[0].temperament}</p>
-                         </div>
-                                   `;
-        })
-        .join('');
-      innerContr.insertAdjacentHTML('beforeend', data);
-      Notiflix.Loading.remove();
-      //dataContainer.classList.remove('hide');
-    })
-
-    .catch(error => {
-      Notiflix.Loading.remove();
-      Notiflix.Notify.failure(
-        'Oops! Something went wrong! Try reloading the page!'
-      );
-
-      console.error(`Error message ${error}`);
-    });
-}
-
-function selectDogBreed(event) {
-  selectedDogBreed = event.target.value;
-}
-
-/*
-catSelector.addEventListener('change', (event) => {
-  selectCatBreed(event);
-
-});
-
-dogSelector.addEventListener('change', (event) => {
-  selectDogBreed(event);
-});
-*/
+let isDogAgain = false;
+let isCatAgain = false;
 
 
 
@@ -164,6 +71,8 @@ fetchCatBreeds()
 
     catSelector.addEventListener('change', event => {
       innerContr.innerHTML = '';
+      placeTable.style.display = 'none';
+      detailsArea.style.height = '500px';
       console.log('Selected value:', event.target.value);
       const selected = event.target.value;
 
@@ -236,6 +145,8 @@ fetchCatBreeds()
 
       dogSelector.addEventListener('change', event => {
         innerContr.innerHTML = '';
+        placeTable.style.display = 'none';
+        detailsArea.style.height = '500px';
         console.log('Selected value:', event.target.value);
         //console.log('Selected id:', this);
         const selected = event.target.value;
@@ -328,6 +239,19 @@ placeSelector.addEventListener('change', (event) => {
   findPlaces(event.target.value, selectedPlace.alpha_2).then((res) => { return res.json() }).then((res) => {
     Notiflix.Loading.remove();
     console.log(res);
+    detailsArea.style.height = "fit-content";
+    placeTable.style.display = 'block';
+    placeTable.style.borderCollapse = 'collapse';
+    const foundPlaces = res.map((place) => {
+      if (place.properties.socials[0]) {
+        return `
+      <tr>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${place.properties.names.primary}</td>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;"><a href=${place.properties.socials[0]}>CLICK HERE</a></td>
+      </tr>
+                  `;};
+    }).join('');
+    placeTableBody.innerHTML = foundPlaces;
   });
   
 });    
@@ -379,15 +303,18 @@ function renderDogBreeds(selector, users) {
 }
 
 function renderDogPlaces(selector, categories) {
-  const placeholder = document.createElement('option');
-  placeholder.setAttribute('disabled', '');
-  placeholder.setAttribute('selected', 'selected');
-  placeholder.setAttribute('value', '');
-  placeholder.textContent = 'Choose a Place Category';
-  placeholder.style.fontWeight = 'bold';
-  selector.append(placeholder);
+  if (isDogAgain === false) {
+    isDogAgain = true;
+    isCatAgain = false;
+    const placeholder = document.createElement('option');
+    placeholder.setAttribute('disabled', '');
+    placeholder.setAttribute('selected', 'selected');
+    placeholder.setAttribute('value', '');
+    placeholder.textContent = 'Choose a Place Category';
+    placeholder.style.fontWeight = 'bold';
+    selector.append(placeholder);
 
-  categories.forEach(category => {
+    categories.forEach(category => {
     
       const option = document.createElement('option');
       option.setAttribute('value', category.value);
@@ -397,37 +324,7 @@ function renderDogPlaces(selector, categories) {
       //option.style.borderRadius = "5px";
       selector.append(option);
     
-  });
+    })
+  };
 }
 
-/*
- .then(() => {
-        renderPetBreeds(catSelector, catBreeds);
-      })
-
-      .then(() => {
-        renderPetBreeds(dogSelector, dogBreeds);
-      });
- */
-
-      /*
-        <table style="border-collapse: collapse;">
-                
-                  <tr>
-                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Name:</h3></th>
-                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.name}</td>
-                  </tr>
-                  <tr>
-                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Bread For:</h3></th>
-                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.bred_for}</td>
-                  </tr>
-                  <tr>
-                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Temperament:</h3></th>
-                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.temperament}</td>
-                  </tr>
-                  <tr>
-                    <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Country of Origin:</h3></th>
-                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myPlace.name}</td>
-                  </tr>
-              </table>
-      */
