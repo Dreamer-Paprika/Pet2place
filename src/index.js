@@ -292,7 +292,16 @@ placeSelector.addEventListener('change', (event) => {
       </tr>
                   `;};
     }).join('');
-    placeTableBody.innerHTML = foundPlaces;
+    if (foundPlaces.length !== 0) {
+      placeTableBody.innerHTML = foundPlaces;
+    }
+    else {
+      placeTableBody.innerHTML = `<tr>
+                                  <td style="color: #8B0000; text-align: center; border: 1px solid #8B0000;">Null</td>
+                                  <td style="color: #8B0000; text-align: center; border: 1px solid #8B0000;">Null</td>
+                                  </tr>
+      `;
+    }
   });
   
 });    
