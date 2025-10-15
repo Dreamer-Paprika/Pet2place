@@ -95,24 +95,32 @@ fetchCatBreeds()
               selectedPlace = myCatPlace;
               return `
               <div style="display: flex; align-items: center; justify-content: center; gap: 20px; border-radius: 30px; border: 1px solid rgb(114, 17, 17); padding: 20px; ">
-                         <div style="border: 1px solid #8B0000;"><img src="${cat.url}" alt="Picture of Cat" style="width: 200px; height: 200px"></div>
+                         <div style="border: 1px solid #8B0000;"><img src="${
+                           cat.url
+                         }" alt="Picture of Cat" style="width: 200px; height: 200px"></div>
                          <div style="display: flex; flex-direction: column; gap:15px; align-items: center; ">
                          
                          <table style="border-collapse: collapse;">
 
                          <tr>
                         <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Name:</h3></th>
-                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${cat.breeds[0].name}</td>
+                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${
+                          cat.breeds[0].name
+                        }</td>
                         </tr>
 
                         <tr>
                         <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Description:</h3></th>
-                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${cat.breeds[0].description}</td>
+                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${
+                          cat.breeds[0].description
+                        }</td>
                         </tr>
 
                           <tr>
                         <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Temperament:</h3></th>
-                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${cat.breeds[0].temperament}</td>
+                        <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${
+                          cat.breeds[0].temperament
+                        }</td>
                         </tr>
 
                          <tr>
@@ -122,7 +130,9 @@ fetchCatBreeds()
 
                          </table>
 
-                          <button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in ${myCatPlace.name}</a></button>
+
+                         <button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in ${myCatPlace.name}</a></button>
+                         
                          
                          </div>
                          </div>
@@ -209,14 +219,27 @@ fetchCatBreeds()
           .then(ans => {
             const myObj = dogBreeds.find(item => item.name === selected);
             const myPlace = Countries.find(country => country.alpha_2 === myObj.country_code);
-            selectedPlace = myPlace;
+            if (myObj.country_code === "AG") {
+              selectedPlace = {
+                name: 'Afghanistan',
+                alpha_2: 'AF',
+                alpha_3: 'AFG',
+                numeric: '004',
+              };
+            }
+            else {
+              selectedPlace = myPlace;
+              console.log('else')
+            }
              //console.log(myObj);
             //console.log(myPlace);
             const data = ans
               .map(dog => {
                 return `
                          <div style="display: flex; align-items: center; justify-content: center; gap: 20px; border-radius: 30px; border: 1px solid rgb(114, 17, 17); padding: 20px; ">
-                         <div style="border: 1px solid #8B0000;"><img src="${dog.url}" alt="Picture of Dog" style="width: 200px; height: 200px"/></div>
+                         <div style="border: 1px solid #8B0000;"><img src="${
+                           dog.url
+                         }" alt="Picture of Dog" style="width: 200px; height: 200px"/></div>
                          
                          <div style="display: flex; flex-direction: column; gap:15px; align-items: center; ">
 
@@ -224,23 +247,38 @@ fetchCatBreeds()
                 
                   <tr>
                     <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Name:</h3></th>
-                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.name}</td>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${
+                      myObj.name
+                    }</td>
                   </tr>
                   <tr>
                     <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Bread For:</h3></th>
-                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.bred_for}</td>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${
+                      myObj.bred_for
+                    }</td>
                   </tr>
                   <tr>
                     <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Temperament:</h3></th>
-                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myObj.temperament}</td>
+                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${
+                      myObj.temperament
+                    }</td>
                   </tr>
                   <tr>
                     <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;"><h3>Country of Origin:</h3></th>
-                    <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myPlace.name}</td>
+                    ${
+                      myObj.country_code === 'AG'
+                        ? ` <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">Afghanistan</td>`
+                        : ` <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${myPlace.name}</td>`
+                    }
                   </tr>
               </table>
 
-              <button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in ${myPlace.name}</a></button>
+
+                         ${
+                           myObj.country_code === 'AG'
+                             ? `<button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in Afghanistan</a></button>`
+                             : `<button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in ${myPlace.name}</a></button>`
+                         }
                          </div>
                          </div>
 
