@@ -53,7 +53,7 @@ fetchCatBreeds()
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const str = response.json()
-    console.log(str);
+    //console.log(str);
     return str;
   })
 
@@ -75,7 +75,7 @@ fetchCatBreeds()
       innerContr.innerHTML = '';
       placeTable.style.display = 'none';
       detailsArea.style.height = '500px';
-      console.log('Selected value:', event.target.value);
+      //console.log('Selected value:', event.target.value);
       const selected = event.target.value;
 
       Notiflix.Loading.hourglass('Loading data, please wait...');
@@ -142,6 +142,7 @@ fetchCatBreeds()
           placeSelector.style.fontFamily = 'Comic Sans MS';
           placeSelector.style.fontWeight = '700';
           renderCatPlaces(placeSelector, catPlaceCategories);
+          console.log('setCat');
           Notiflix.Loading.remove();
           
         })
@@ -188,7 +189,7 @@ fetchCatBreeds()
         innerContr.innerHTML = '';
         placeTable.style.display = 'none';
         detailsArea.style.height = '500px';
-        console.log('Selected value:', event.target.value);
+        //console.log('Selected value:', event.target.value);
         //console.log('Selected id:', this);
         const selected = event.target.value;
         const theObj = dogBreeds.find(item => item.name === selected);
@@ -201,7 +202,7 @@ fetchCatBreeds()
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const tace = response.json();
-            console.log(tace);
+            //console.log(tace);
             return tace;
           })
 
@@ -209,8 +210,8 @@ fetchCatBreeds()
             const myObj = dogBreeds.find(item => item.name === selected);
             const myPlace = Countries.find(country => country.alpha_2 === myObj.country_code);
             selectedPlace = myPlace;
-             console.log(myObj);
-            console.log(myPlace);
+             //console.log(myObj);
+            //console.log(myPlace);
             const data = ans
               .map(dog => {
                 return `
@@ -257,6 +258,7 @@ fetchCatBreeds()
             placeSelector.style.fontFamily = "Comic Sans MS";
             placeSelector.style.fontWeight = "700";
             renderDogPlaces(placeSelector, dogPlaceCategories);
+            console.log("setDog");
             Notiflix.Loading.remove();
             
           })
@@ -279,7 +281,7 @@ placeSelector.addEventListener('change', (event) => {
   Notiflix.Loading.hourglass('Loading data, please wait a bit...');
   findPlaces(event.target.value, selectedPlace.alpha_2).then((res) => { return res.json() }).then((res) => {
     Notiflix.Loading.remove();
-    console.log(res);
+    //console.log(res);
     detailsArea.style.height = "fit-content";
     placeTable.style.display = 'block';
     placeTable.style.borderCollapse = 'collapse';
@@ -353,9 +355,9 @@ function renderDogBreeds(selector, users) {
 }
 
 function renderDogPlaces(selector, categories) {
-  if (isDogAgain === false) {
-    isDogAgain = true;
-    isCatAgain = false;
+
+   selector.innerHTML = '';
+ 
     const placeholder = document.createElement('option');
     placeholder.setAttribute('disabled', '');
     placeholder.setAttribute('selected', 'selected');
@@ -376,13 +378,13 @@ function renderDogPlaces(selector, categories) {
     
     })
   };
-}
+
 
 
 function renderCatPlaces(selector, categories) {
-  if (isCatAgain === false) {
-    isDogAgain = false;
-    isCatAgain = true;
+
+   selector.innerHTML = '';
+ 
     const placeholder = document.createElement('option');
     placeholder.setAttribute('disabled', '');
     placeholder.setAttribute('selected', 'selected');
@@ -401,5 +403,5 @@ function renderCatPlaces(selector, categories) {
       selector.append(option);
     });
   }
-}
+
 
