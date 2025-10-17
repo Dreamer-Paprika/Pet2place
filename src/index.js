@@ -54,8 +54,6 @@ const keySideEffects = () => {
     const userLocale = navigator.language; // e.g., "en-US" or "fr-FR"
     const myDate = new Date(keyDetails.createdAt);
 
-    console.log(myDate);
-
     const formatter = new Intl.DateTimeFormat(userLocale, {
       year: 'numeric',
       month: 'long',
