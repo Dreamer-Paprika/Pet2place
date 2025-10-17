@@ -50,6 +50,23 @@ const keySideEffects = () => {
   if (JSON.parse(localStorage.getItem('myApiKey'))) {
     const keyDetails = JSON.parse(localStorage.getItem('myApiKey'));
     apiGenTable.style.display = 'none';
+
+    const userLocale = navigator.language; // e.g., "en-US" or "fr-FR"
+    const myDate = new Date(keyDetails.createdAt);
+
+    console.log(myDate);
+
+    const formatter = new Intl.DateTimeFormat(userLocale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit', // Optional: include seconds
+      hour12: true, // Optional: use 12-hour clock (set to false for 24-hour clock)
+    });
+    const createdDate = formatter.format(myDate);
+
     apiViewTable.innerHTML = `
      <table class="api-view-table" style="border-collapse: collapse;">
               <caption style="color: #8B0000; border: 1px solid #8B0000; font-weight: 700; font-size: 20px;">View your API Details</caption>
@@ -73,7 +90,7 @@ const keySideEffects = () => {
 
               <tr>
                 <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;">CREATED AT:</th>
-                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${keyDetails.createdAt}</td>
+                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${createdDate}</td>
               </tr>
             </table>
   `;
@@ -112,7 +129,7 @@ apiGenTableButton.addEventListener("click", async () => {
 
 
 
-Notiflix.Loading.hourglass('Fetching breed, please wait...');
+Notiflix.Loading.hourglass('Fetching breeds, please wait...');
 
 
 fetchCatBreeds()
@@ -136,8 +153,6 @@ fetchCatBreeds()
 
   .then(users => {
     renderCatBreeds(catSelector, users);
-    //loaderMsg.classList.add('hide');
-    //Notiflix.Loading.remove();
 
     catSelector.addEventListener('change', event => {
       innerContr.innerHTML = '';
@@ -226,8 +241,6 @@ fetchCatBreeds()
         })
 
         .catch(error => {
-          //loaderMsg.classList.add('hide');
-          //errorMsg.classList.remove('hide');
           Notiflix.Loading.remove();
           Notiflix.Notify.failure(
             'Oops! Something went wrong! Try reloading the page!'
