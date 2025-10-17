@@ -4,6 +4,7 @@ import { fetchDogBreeds } from './dog-api.js';
 import { fetchCatByBreed } from './cat-api.js';
 import { fetchDogByBreed } from './dog-api.js';
 import { findPlaces } from './places-api.js';
+import { createApiKey } from './theauthapi.js';
 import Countries from './countries_sorted_alphabetical.json';
 import dogPlaceCategories from './dogPlaceCategories.json';
 import catPlaceCategories from './catPlaceCategories.json';
@@ -40,11 +41,78 @@ let selectedPlace;
 let isDogAgain = false;
 let isCatAgain = false;
 
+const apiGenTable = document.querySelector('.api-gen-table-wrapper');
+
+const apiViewTable = document.querySelector('.api-view-table-wrapper');
+
+
+const keySideEffects = () => {
+  if (JSON.parse(localStorage.getItem('myApiKey'))) {
+    const keyDetails = JSON.parse(localStorage.getItem('myApiKey'));
+    apiGenTable.style.display = 'none';
+    apiViewTable.innerHTML = `
+     <table class="api-view-table" style="border-collapse: collapse;">
+              <caption style="color: #8B0000; border: 1px solid #8B0000; font-weight: 700; font-size: 20px;">View your API Details</caption>
+              <tr>
+                <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;">API KEY NAME:</th>
+                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${keyDetails.name}</td>
+              </tr>
+              <tr>
+                <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;">API KEY:</th>
+                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${keyDetails.key}</td>
+              </tr>
+              <tr>
+                <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;">CUSTOM ACCOUNT ID:</th>
+                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${keyDetails.customAccountId}</td>
+              </tr>
+
+              <tr>
+                <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;">CUSTOM METADATA:</th>
+                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${keyDetails.customMetaData.metadata_val}</td>
+              </tr>
+
+              <tr>
+                <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;">CREATED AT:</th>
+                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000;">${keyDetails.createdAt}</td>
+              </tr>
+            </table>
+  `;
+  }
+}
+
+keySideEffects();
+
+/*if (localStorage.getItem('hasKey') === null) {
+  apiViewTable.style.display = 'none';
+}*/
+
+const keyName = document.querySelector('.keyName');
+const keyId = document.querySelector('.keyId');
+const keyMetaData = document.querySelector('.keyMetaData');
+
+const apiGenTableButton = document.querySelector('.api-gen-table-wrapper-button');
+
+apiGenTableButton.addEventListener("click", async () => {
+  Notiflix.Loading.hourglass('Creating Api Key, please wait...');
+  
+  try {
+    const key = await createApiKey(keyName.value, keyId.value, keyMetaData.value);
+    console.log('API Key created:', key);
+    localStorage.setItem('myApiKey', JSON.stringify(key));
+    Notiflix.Loading.remove();
+    Notiflix.Notify.success('API Key created and stored successfully!');
+    keySideEffects();
+  } catch (error) {
+    Notiflix.Loading.remove();
+    Notiflix.Notify.failure('Failed to create API Key');
+    console.error('Error creating API key:', error);
+  }
+});
 
 
 
 
-Notiflix.Loading.hourglass('Fetching breeds, please wait...');
+Notiflix.Loading.hourglass('Fetching breed, please wait...');
 
 
 fetchCatBreeds()
@@ -131,7 +199,7 @@ fetchCatBreeds()
                          </table>
 
 
-                         <button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in ${myCatPlace.name}</a></button>
+                         <button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeInfo">Find Places in ${myCatPlace.name}</a></button>
                          
                          
                          </div>
@@ -152,7 +220,7 @@ fetchCatBreeds()
           placeSelector.style.fontFamily = 'Comic Sans MS';
           placeSelector.style.fontWeight = '700';
           renderCatPlaces(placeSelector, catPlaceCategories);
-          console.log('setCat');
+          event.target.value = '';
           Notiflix.Loading.remove();
           
         })
@@ -276,8 +344,8 @@ fetchCatBreeds()
 
                          ${
                            myObj.country_code === 'AG'
-                             ? `<button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in Afghanistan</a></button>`
-                             : `<button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeDetails">Find Places in ${myPlace.name}</a></button>`
+                             ? `<button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeInfo">Find Places in Afghanistan</a></button>`
+                             : `<button style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000;"><a href="#placeInfo">Find Places in ${myPlace.name}</a></button>`
                          }
                          </div>
                          </div>
@@ -296,7 +364,7 @@ fetchCatBreeds()
             placeSelector.style.fontFamily = "Comic Sans MS";
             placeSelector.style.fontWeight = "700";
             renderDogPlaces(placeSelector, dogPlaceCategories);
-            console.log("setDog");
+            event.target.value = "";
             Notiflix.Loading.remove();
             
           })

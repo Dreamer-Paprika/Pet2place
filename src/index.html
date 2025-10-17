@@ -27,7 +27,7 @@
       </div>
 
       <div class="intro-area" >
-        <i>Discover places located in your pets country of origin.</i>
+        <i>Discover places located in your pets country of origin, and also discover a collection of captivating images with your API Key <a href="#myAPI">"HERE"</a></i>
       </div>
 
       <div class="pet-area">
@@ -39,6 +39,14 @@
     <select class="cat-breed-select"></select>
     </div>
 
+    <nav>
+      <ul class="nav-list">
+        <li><a href="#petInfo" class="nav-item">Pet Info</a></li>
+        <li><a href="#placeInfo" class="nav-item">Place Info</a></li>
+        <li><a href="#myAPI" class="nav-item">API Info</a></li>
+      </ul>
+    </nav>
+
     <div class="dog-area">
          <img class="dog-image" src="./images/dogImage.png"/>
       <p class="dog-area-label">Select a Dog breed</p>
@@ -46,7 +54,7 @@
     </div>
         </div>
 
-        <div class="pet-info">
+        <div class="pet-info" id="petInfo">
           
           <div class="pet-details">
            <p class="pet-info-title">Pet Info</p>
@@ -56,12 +64,46 @@
           </div>
         </div>
 
-        <div class="place-info">
+        <div class="place-info" id="placeInfo">
           
           <div class="place-details">
            <p class="place-info-title">Place Info</p>
            <div class="place-table-wrapper" id="placeDetails">
             <a href="#breedSelection" class="place-alt-link">Select a Pet Breed</a>
+            
+           </div>
+          </div>
+        </div>
+
+        <div class="api-info" id="myAPI">
+          <div class="api-details">
+            <p class="api-info-title">API Info</p>
+           <div class="api-table-wrapper">
+
+            <div class="api-gen-table-wrapper">
+            <table class="api-gen-table" style="border-collapse: collapse;">
+              <caption style="color: #8B0000; border: 1px solid #8B0000; font-weight: 700; font-size: 20px;">Create your API Key</caption>
+              <tr>
+                <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;">API KEY NAME:</th>
+                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000; padding: 5px;"><input class="keyName" style="background-color: #f1dbba; color: #8B0000; font-size: 14px; border: none; font-family: Comic Sans MS; font-weight: 700;"/></td>
+              </tr>
+              <tr>
+                <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;">CUSTOM ACCOUNT ID:</th>
+                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000; padding: 5px"><input class="keyId" style="background-color: #f1dbba; color: #8B0000; font-size: 14px; border: none; font-family: Comic Sans MS; font-weight: 700"/></td>
+              </tr>
+              <tr>
+                <th style="color: #8B0000; text-align: left; border: 1px solid #8B0000; font-weight: 700;">CUSTOM META DATA:</th>
+                <td style="color: #8B0000; text-align: left; border: 1px solid #8B0000; padding: 5px"><input class="keyMetaData" style="background-color: #f1dbba; color: #8B0000; font-size: 14px; border: none; font-family: Comic Sans MS; font-weight: 700"/></td>
+              </tr>
+            </table>
+            <button class="api-gen-table-wrapper-button" style="padding: 10px 5px; background-color: rgb(240, 164, 65); border-radius: 20px; font-family: Comic Sans MS; font-weight: 700; border: 1px solid #8B0000; color: #8B0000; cursor: pointer;">Create API Key</button>
+            </div>
+
+
+
+            <div class="api-view-table-wrapper">
+         
+            </div>
             
            </div>
           </div>
