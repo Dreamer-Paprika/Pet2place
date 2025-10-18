@@ -117,6 +117,10 @@ const apiUseTableButton = document.querySelector(".api-use-table-wrapper-button"
 
 const keyValue = document.querySelector('.keyValue');
 
+const imageGallery = document.querySelector('.image-gallery');
+
+const apiDetailsArea = document.querySelector('.api-details');
+
 apiGenTableButton.addEventListener("click", async () => {
   if ((keyName.value.trim() === "" || keyId.value.trim() === "" || keyMetaData.value.trim() === "")) {
     Notiflix.Notify.warning('All feilds are required!');
@@ -124,7 +128,11 @@ apiGenTableButton.addEventListener("click", async () => {
   }
   Notiflix.Loading.hourglass('Creating Api Key, please wait...');
   try {
-    const key = await createApiKey(keyName.value, keyId.value, keyMetaData.value);
+    const key = await createApiKey(
+      keyName.value.trim(),
+      keyId.value.trim(),
+      keyMetaData.value.trim()
+    );
     localStorage.setItem('myApiKey', JSON.stringify(key));
     Notiflix.Loading.remove();
     Notiflix.Notify.success('API Key created and stored successfully!');
@@ -145,8 +153,22 @@ apiUseTableButton.addEventListener("click", async() => {
   Notiflix.Loading.hourglass('Getting Images, please wait...');
   
  try {
-    const Images = await getImages(keyValue.value);
+    const Images = await getImages(keyValue.value.trim());
     console.log('Images aquired:', Images);
+   apiDetailsArea.style.height = "fit-content";
+    const myImages = Images
+      .map(Image => {
+        return `
+        <li><img src=${Image.link} style="width: 200px; height: 200px; border: 1px solid #721111;"/></li>
+        `;
+      })
+     .join('');
+   
+   imageGallery.style.border = '1px solid #721111';
+   imageGallery.style.padding = '20px';
+   imageGallery.style.borderRadius = '20px';
+   imageGallery.innerHTML = myImages;
+
     Notiflix.Loading.remove();
     Notiflix.Notify.success('View response in browser console!');
   } catch (error) {
