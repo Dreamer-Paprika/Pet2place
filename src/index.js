@@ -170,7 +170,7 @@ apiUseTableButton.addEventListener("click", async() => {
    imageGallery.innerHTML = myImages;
 
     Notiflix.Loading.remove();
-    Notiflix.Notify.success('View response in browser console!');
+    Notiflix.Notify.success('View response in your browser console!');
   } catch (error) {
     Notiflix.Loading.remove();
     Notiflix.Notify.failure('Failed to get Images');
@@ -362,7 +362,6 @@ fetchCatBreeds()
             }
             else {
               selectedPlace = myPlace;
-              console.log('else')
             }
              //console.log(myObj);
             //console.log(myPlace);
