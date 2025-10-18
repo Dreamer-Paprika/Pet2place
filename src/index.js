@@ -5,6 +5,8 @@ import { fetchCatByBreed } from './cat-api.js';
 import { fetchDogByBreed } from './dog-api.js';
 import { findPlaces } from './places-api.js';
 import { createApiKey } from './theauthapi.js';
+import { getImages } from './images-api.js';
+
 import Countries from './countries_sorted_alphabetical.json';
 import dogPlaceCategories from './dogPlaceCategories.json';
 import catPlaceCategories from './catPlaceCategories.json';
@@ -38,12 +40,14 @@ placeTable.append(placeTableBody);
 
 let dogBreeds;
 let selectedPlace;
-let isDogAgain = false;
-let isCatAgain = false;
 
 const apiGenTable = document.querySelector('.api-gen-table-wrapper');
 
 const apiViewTable = document.querySelector('.api-view-table-wrapper');
+
+const apiUseTable = document.querySelector('.api-use-table-wrapper');
+
+apiUseTable.style.display = "none";
 
 
 const keySideEffects = () => {
@@ -92,6 +96,8 @@ const keySideEffects = () => {
               </tr>
             </table>
   `;
+    
+apiUseTable.style.display = 'flex';
   }
 }
 
@@ -107,12 +113,18 @@ const keyMetaData = document.querySelector('.keyMetaData');
 
 const apiGenTableButton = document.querySelector('.api-gen-table-wrapper-button');
 
+const apiUseTableButton = document.querySelector(".api-use-table-wrapper-button");
+
+const keyValue = document.querySelector('.keyValue');
+
 apiGenTableButton.addEventListener("click", async () => {
+  if ((keyName.value.trim() === "" || keyId.value.trim() === "" || keyMetaData.value.trim() === "")) {
+    Notiflix.Notify.warning('All feilds are required!');
+    return
+  }
   Notiflix.Loading.hourglass('Creating Api Key, please wait...');
-  
   try {
     const key = await createApiKey(keyName.value, keyId.value, keyMetaData.value);
-    console.log('API Key created:', key);
     localStorage.setItem('myApiKey', JSON.stringify(key));
     Notiflix.Loading.remove();
     Notiflix.Notify.success('API Key created and stored successfully!');
@@ -124,6 +136,26 @@ apiGenTableButton.addEventListener("click", async () => {
   }
 });
 
+
+apiUseTableButton.addEventListener("click", async() => { 
+  if (keyValue.value.trim() === "") {
+   Notiflix.Notify.warning('Enter Api Key!');
+   return;
+  }
+  Notiflix.Loading.hourglass('Getting Images, please wait...');
+  
+ try {
+    const Images = await getImages(keyValue.value);
+    console.log('Images aquired:', Images);
+    Notiflix.Loading.remove();
+    Notiflix.Notify.success('View response in browser console!');
+  } catch (error) {
+    Notiflix.Loading.remove();
+    Notiflix.Notify.failure('Failed to get Images');
+    console.error('Error getting Images:', error);
+  }
+
+});
 
 
 

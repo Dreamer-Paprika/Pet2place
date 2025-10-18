@@ -336,7 +336,7 @@ border-radius: 30px;
 .api-table-wrapper{
  display: flex;
  flex-direction: column;
- gap:10px;
+ gap:30px;
 justify-content: center;
 align-items: center;
 width: 100%;
@@ -356,6 +356,14 @@ align-items: center;
 }
 
 .api-view-table-wrapper{
+  display: flex;
+ flex-direction: column;
+ gap:10px;
+justify-content: center;
+align-items: center;
+}
+
+.api-use-table-wrapper{
   display: flex;
  flex-direction: column;
  gap:10px;
