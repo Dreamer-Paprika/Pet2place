@@ -1,5 +1,5 @@
 export async function getImages(apiKey) {
-  const url = 'https://pet2place-backend.onrender.com/api/images/getImages';
+  const url = 'https://pet2place-backend-12a6.onrender.com/api/images/getImages';
   const options = {
     method: 'GET',
     headers: {

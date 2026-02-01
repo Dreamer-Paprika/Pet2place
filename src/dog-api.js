@@ -3,7 +3,7 @@ export function fetchDogBreeds() {
     method: 'GET',
     headers: {
       'x-api-key':
-        'live_gMNx6KTqJpRIJtVlRfgsQZXJLZyn09vythVtFvSy6BFSm8btn7gxWaWQoJHXnFdm',
+        'live_YPUX8zjp5eOCtJwA4QM4is9BG9JoRdsyINDCRBWHxLApRHncCDAuXysWXapbcVe2',
     },
   });
 }
@@ -13,7 +13,7 @@ export function fetchDogByBreed(id) {
     method: 'GET',
     headers: {
       'x-api-key':
-        'live_gMNx6KTqJpRIJtVlRfgsQZXJLZyn09vythVtFvSy6BFSm8btn7gxWaWQoJHXnFdm',
+        'live_YPUX8zjp5eOCtJwA4QM4is9BG9JoRdsyINDCRBWHxLApRHncCDAuXysWXapbcVe2',
     },
   });
 }

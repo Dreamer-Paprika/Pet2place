@@ -350,7 +350,9 @@ fetchCatBreeds()
           })
 
           .then(ans => {
+            console.log(ans);
             const myObj = dogBreeds.find(item => item.name === selected);
+            console.log(myObj);
             const myPlace = Countries.find(country => country.alpha_2 === myObj.country_code);
             if (myObj.country_code === "AG") {
               selectedPlace = {
